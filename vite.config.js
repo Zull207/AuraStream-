@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/AuraStream/', // <--- Baris penyelemat whitescreen ada di sini
+  base: '/AuraStream-/', // <--- Baris penyelemat whitescreen ada di sini
   
   server: {
     host: true,
