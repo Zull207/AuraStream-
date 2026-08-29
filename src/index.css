@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #09090b;
+  --color-bg-secondary: #111113;
+  --color-bg-card: #18181b;
+  --color-bg-hover: #27272a;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #52525b;
+  --color-border: #27272a;
+  --color-accent: #a78bfa;
+  --color-accent-dim: #7c5cbf;
+  --color-accent-glow: rgba(167, 139, 250, 0.25);
+  --color-accent-blue: #60a5fa;
+  --color-surface: #141416;
+  --color-surface-raised: #1c1c1f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar { display: none; }
+
+body {
+  background-color: #09090b;
+  color: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  position: fixed;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+}
+
+#root {
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ─── Safe Areas ─── */
+.safe-area-top { padding-top: env(safe-area-inset-top, 0); }
+.safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
+
+/* ─── Glassmorphism ─── */
+.glass {
+  background: rgba(20, 20, 22, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.glass-player {
+  background: rgba(9, 9, 11, 0.88);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Gradient Utilities ─── */
+.gradient-accent {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12) 0%, rgba(96, 165, 250, 0.06) 100%);
+}
+
+.gradient-accent-strong {
+  background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+}
+
+.gradient-card {
+  background: linear-gradient(145deg, #18181b 0%, #141416 100%);
+}
+
+/* ─── Animations ─── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.08); }
+  50% { box-shadow: 0 0 50px rgba(167, 139, 250, 0.18), 0 0 80px rgba(96, 165, 250, 0.06); }
+}
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+@keyframes pulse {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fade-in-up 0.4s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* ─── Scrollbar ─── */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Accent Button ─── */
+.btn-accent {
+  background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-accent:active { transform: scale(0.96); opacity: 0.9; }
