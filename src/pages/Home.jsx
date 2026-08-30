@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TrendingUp, AlertTriangle, RefreshCw, Play, ListMusic, Music, Sparkles } from 'lucide-react';
+import { TrendingUp, AlertTriangle, RefreshCw, Play, ListMusic, Music, Sparkles, Wifi, WifiOff } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 import { api } from '../services/api';
 import TrackCard from '../components/home/TrackCard';
@@ -16,6 +16,7 @@ export default function Home() {
   const [recentTracks] = useState(() => getRecentlyPlayed().slice(0, 10));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [apiSource, setApiSource] = useState('justlann');
   const { playTrack } = usePlayerStore();
 
   const fetchData = async () => {
@@ -24,6 +25,7 @@ export default function Home() {
     try {
       const data = await api.getHome();
       setHomeData(data);
+      setApiSource(api.getSource());
     } catch (err) {
       setError(err.message || 'Gagal memuat data');
     } finally {
@@ -37,8 +39,13 @@ export default function Home() {
     setSelectedPlaylist(item);
     setLoadingPlaylist(true);
     try {
-      const { tracks } = await api.getPlaylistTracks(item.id);
-      setPlaylistTracks(tracks);
+      // YouTube fallback playlists have tracks embedded
+      if (item.items && item.items.length > 0) {
+        setPlaylistTracks(item.items);
+      } else {
+        const { tracks } = await api.getPlaylistTracks(item.id);
+        setPlaylistTracks(tracks);
+      }
     } catch (err) {
       console.error('Gagal memuat playlist:', err);
     } finally {
@@ -60,9 +67,20 @@ export default function Home() {
     <div className="pb-4">
       {/* Header */}
       <div className="sticky top-0 z-10 px-4 pt-5 pb-3" style={{ background: 'linear-gradient(180deg, #09090b 0%, #09090b 70%, transparent 100%)' }}>
-        <div className="flex items-center gap-2.5">
-          <img src={logoImg} alt="AuraStream" className="w-9 h-9 rounded-lg object-cover shadow-lg" />
-          <h1 className="text-xl font-bold text-text-primary tracking-tight">AuraStream</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <img src={logoImg} alt="AuraStream" className="w-9 h-9 rounded-lg object-cover shadow-lg" />
+            <h1 className="text-xl font-bold text-text-primary tracking-tight">AuraStream</h1>
+          </div>
+          {/* Source indicator */}
+          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium ${
+            apiSource === 'youtube'
+              ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+              : 'bg-green-500/10 text-green-400 border border-green-500/20'
+          }`}>
+            {apiSource === 'youtube' ? <WifiOff className="w-3 h-3" /> : <Wifi className="w-3 h-3" />}
+            {apiSource === 'youtube' ? 'YouTube' : 'Spotify'}
+          </div>
         </div>
       </div>
 
